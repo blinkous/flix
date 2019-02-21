@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AlamofireImage
 
 //To Use table view, add in: UITableViewDataSource, UITableViewDelegate
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -52,7 +53,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // let cell = UITableViewCell()
-        // using dequeue method allows you to use your custom MovieCell that we designed
+        // using dequeue method allows you recycle cells that are off-screen and here we use our custom MovieCell that we designed
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell
         
         // To print out movie title on the row, we need to first get the movie titles
@@ -70,12 +71,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.synopsisLabel.text = synopsis
         
         // Get the poster image
-        let baseUrl = "https://image.tmbd.org/t/p/w185"
+        let baseUrl = "https://image.tmdb.org/t/p/w500"
         let posterPath = movie["poster_path"] as! String
         // URL has some form of validation to make sure that this is a URL
         let posterUrl = URL(string: baseUrl + posterPath)
         
-        
+        // Using the pod library AlamofireImage allows us to use this to get an image from a URL and the pod will take care of downloading and getting it
+        cell.posterView.af_setImage(withURL: posterUrl!)
         
         return cell
     }
