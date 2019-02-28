@@ -23,11 +23,10 @@ class MovieGridViewController: UIViewController, UICollectionViewDataSource, UIC
         
         // Changing the layout configuration
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-
         layout.minimumLineSpacing = 4 // Control the spacing between the rows
         layout.minimumInteritemSpacing = 4 // Set spacing btw columns
         
-        // To set the item size
+        // To set the collection view cell size
         let width = (view.frame.size.width - layout.minimumInteritemSpacing * 2) / 3 // set width to the width of the screen divided by 3
         layout.itemSize = CGSize(width: width, height: width * 3/2)
         
@@ -62,21 +61,30 @@ class MovieGridViewController: UIViewController, UICollectionViewDataSource, UIC
         let movie = movies[indexPath.item]
         
         // Get the poster image and set it
-        let baseUrl = "https://image.tmdb.org/t/p/w500"
+        let baseUrl = "https://image.tmdb.org/t/p/w185"
         let posterPath = movie["poster_path"] as! String
         let posterUrl = URL(string: baseUrl + posterPath)
         cell.posterView.af_setImage(withURL: posterUrl!)
         
         return cell
     }
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+    //sender is the cell that was tapped on, it's of the default type Any?
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        
+        // Find the selected movie
+        let cell = sender as! UICollectionViewCell // cast the sender as the UITableViewCell
+        let indexPath = collectionView.indexPath(for: cell)! // tableview knows for a given cell what the index path is
+        let movie = movies[indexPath.row] // finally access the array
+        
+        // Pass the selected movie to the details view controller
+        let detailsViewController = segue.destination as! MovieDetailsViewController //must cast as a MoviesDetailsViewController or else it'll be a generic view controller without the movie variable in that controller
+        detailsViewController.movie = movie // set the movie property of the MovieDetailsViewContoller as this movie that has been selected
     }
-    */
 
 }
